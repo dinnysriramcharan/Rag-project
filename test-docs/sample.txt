@@ -1,0 +1,21 @@
+AI Document Search System
+
+This is a sample document for testing the RAG (Retrieval-Augmented Generation) chatbot system.
+
+Key Features:
+- Document ingestion and processing
+- Vector embeddings using OpenAI
+- Pinecone vector database for storage
+- Semantic search and retrieval
+- Chat interface with citations
+
+The system can process various document formats including PDF, TXT, and Markdown files. It uses advanced natural language processing to understand and answer questions about the uploaded documents.
+
+Technical Stack:
+- Backend: FastAPI with Python
+- Frontend: React with Tailwind CSS
+- AI: OpenAI GPT models for chat completion
+- Vector DB: Pinecone for semantic search
+- Embeddings: OpenAI text-embedding models
+
+This system is designed to help users quickly find information from their document collections through natural language queries.

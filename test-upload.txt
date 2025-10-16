@@ -1,0 +1,10 @@
+This is a test document for the upload feature.
+
+The AI Document Search system now supports:
+- File upload through the web interface
+- Drag and drop functionality
+- Support for PDF, TXT, and MD files
+- Automatic text extraction and chunking
+- Vector embedding and storage in Pinecone
+
+You can now upload documents directly from the UI instead of using command line scripts.
