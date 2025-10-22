@@ -60,7 +60,7 @@ def _get_allowed_origins() -> List[str]:
     raw = os.getenv("ALLOWED_ORIGINS", "")
     if not raw:
         # Default origins for development
-        return ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"]
+        return ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000", "*"]
     return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 # Rate limiting (simple in-memory)
