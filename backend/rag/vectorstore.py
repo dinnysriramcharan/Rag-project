@@ -2,7 +2,7 @@ import os
 from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
-from pinecone import Pinecone
+from pinecone import PineconeClient
 
 
 class PineconeVectorStore:
@@ -16,7 +16,7 @@ class PineconeVectorStore:
             raise RuntimeError("PINECONE_ENV is not set")
 
         self.index_name = index_name
-        self.pc = Pinecone(api_key=pinecone_api_key)
+        self.pc = PineconeClient(api_key=pinecone_api_key)
 
         # Ensure index exists (safe on serverless init flows outside hot path)
         try:
