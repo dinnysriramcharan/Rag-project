@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 
 from openai import OpenAI
 
-from backend.rag.vectorstore import PineconeVectorStore
+from rag.vectorstore import PineconeVectorStore
 
 
 SYSTEM_PROMPT = (

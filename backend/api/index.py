@@ -20,7 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # Load environment variables from backend/.env if present
 load_dotenv(PROJECT_ROOT / "backend" / ".env", override=False)
 
-from backend.rag.chain import RAGChain
+from rag.chain import RAGChain
 
 # Configure logging
 logging.basicConfig(
