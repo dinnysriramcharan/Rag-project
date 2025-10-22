@@ -13,10 +13,6 @@ export type ChatResponse = {
 // API base URL - use environment variable or default to localhost
 export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
-// Debug: Log the actual API_BASE being used
-console.log('API_BASE:', API_BASE)
-console.log('VITE_API_BASE env:', import.meta.env.VITE_API_BASE)
-
 export async function chat(req: ChatRequest): Promise<ChatResponse> {
   const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
