@@ -3,12 +3,10 @@ import sys
 import logging
 from pathlib import Path
 from typing import List, Optional
-import asyncio
 from datetime import datetime
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import Body
 from fastapi.responses import JSONResponse
 import tempfile
 from dotenv import load_dotenv
@@ -61,7 +59,7 @@ ALLOWED_EXTENSIONS = {'.pdf', '.txt', '.md'}
 def _get_allowed_origins() -> List[str]:
     raw = os.getenv("ALLOWED_ORIGINS", "")
     if not raw:
-        return ["http://localhost:5173", "http://localhost:3000"]  # Default dev origins
+        return ["http://localhost:5173", "http://localhost:5174", "http://localhost:3000", "*"]  # Default dev origins
     return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 # Rate limiting (simple in-memory)
@@ -111,7 +109,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_get_allowed_origins(),
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -130,6 +128,7 @@ async def rate_limit_middleware(request: Request, call_next):
 
 # Health check endpoint
 @app.get("/health", response_model=HealthResponse)
+@app.get("/api/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     return HealthResponse(
         status="ok",
@@ -139,6 +138,7 @@ async def health() -> HealthResponse:
 
 # Detailed health check
 @app.get("/health/detailed")
+@app.get("/api/health/detailed")
 async def detailed_health():
     try:
         # Test RAG chain initialization
@@ -177,7 +177,22 @@ def _get_chain() -> RAGChain:
         _rag_chain = RAGChain()
     return _rag_chain
 
+@app.options("/chat")
+@app.options("/api/chat")
+async def chat_options():
+    from fastapi.responses import Response
+    return Response(
+        content="OK",
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+        }
+    )
+
 @app.post("/chat")
+@app.post("/api/chat")
 async def chat(request: ChatRequest) -> dict:
     """Chat with the AI using document context"""
     try:
@@ -198,7 +213,22 @@ async def chat(request: ChatRequest) -> dict:
         logger.error(f"Chat error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error during chat processing")
 
+@app.options("/upload")
+@app.options("/api/upload")
+async def upload_options():
+    from fastapi.responses import Response
+    return Response(
+        content="OK",
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+        }
+    )
+
 @app.post("/upload")
+@app.post("/api/upload")
 async def upload_document(
     request: Request,
     file: UploadFile = File(...),

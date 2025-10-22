@@ -11,25 +11,22 @@ export default function App() {
   const [topK, setTopK] = useState(5)
   const [namespace, setNamespace] = useState('default')
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [isVercelDeployment, setIsVercelDeployment] = useState(false)
   const [healthStatus, setHealthStatus] = useState<any>(null)
   const lastAnswerCitations = useRef<ChatResponse['citations']>([])
 
   const canSend = useMemo(() => input.trim().length > 0 && !loading, [input, loading])
 
-  // Check if we're in Vercel deployment
+  // Check health status
   useEffect(() => {
-    const checkDeployment = async () => {
+    const checkHealthStatus = async () => {
       try {
         const health = await checkHealth()
         setHealthStatus(health)
-        setIsVercelDeployment(health.environment === 'vercel')
       } catch (error) {
-        console.log('Health check failed, assuming local development')
-        setIsVercelDeployment(false)
+        console.log('Health check failed')
       }
     }
-    checkDeployment()
+    checkHealthStatus()
   }, [])
 
   async function onSend() {
@@ -72,19 +69,11 @@ export default function App() {
           <h2 className="text-sm font-semibold opacity-80">Workspace</h2>
           {healthStatus && (
             <div className="text-xs opacity-60">
-              {healthStatus.environment === 'vercel' ? '🌐 Vercel' : '💻 Local'}
+              💻 Local Development
             </div>
           )}
         </div>
         
-        {isVercelDeployment && (
-          <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-            <div className="text-xs text-yellow-800 dark:text-yellow-200">
-              <strong>Demo Mode:</strong> File upload is not available in Vercel deployment. 
-              You can still chat with pre-uploaded documents.
-            </div>
-          </div>
-        )}
         
         <div className="space-y-4">
           <div>
@@ -109,13 +98,7 @@ export default function App() {
           </div>
           <div>
             <h3 className="text-sm font-medium mb-2">Upload documents</h3>
-            {isVercelDeployment ? (
-              <div className="text-xs text-gray-500 dark:text-gray-400 p-2 border border-gray-200 dark:border-gray-700 rounded">
-                Upload not available in demo mode
-              </div>
-            ) : (
-              <FileUpload onUpload={handleFileUpload} namespace={namespace} />
-            )}
+            <FileUpload onUpload={handleFileUpload} namespace={namespace} />
           </div>
           {lastAnswerCitations.current.length > 0 && (
             <div className="text-sm">
@@ -146,11 +129,6 @@ export default function App() {
               {sidebarOpen ? 'Hide' : 'Show'} Menu
             </button>
             <h1 className="text-base font-semibold">RAG Chatbot</h1>
-            {isVercelDeployment && (
-              <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
-                Demo
-              </span>
-            )}
           </div>
         </header>
 
@@ -158,17 +136,7 @@ export default function App() {
           <div className="mx-auto w-full max-w-3xl px-4 py-6">
             {messages.length === 0 ? (
               <div className="text-center text-sm opacity-70 py-10">
-                {isVercelDeployment ? (
-                  <div>
-                    <p className="mb-4">Welcome to the RAG Chatbot Demo!</p>
-                    <p className="text-xs opacity-60">
-                      This is a live demo deployed on Vercel. You can chat with pre-uploaded documents.
-                      Try asking: "What is this system about?" or "Tell me about the technical stack."
-                    </p>
-                  </div>
-                ) : (
-                  <p>Ask anything about your uploaded documents.</p>
-                )}
+                <p>Ask anything about your uploaded documents.</p>
               </div>
             ) : null}
 
@@ -200,7 +168,7 @@ export default function App() {
                   }
                 }}
                 rows={1}
-                placeholder={isVercelDeployment ? "Try: What is this system about?" : "Message AI..."}
+                placeholder="Message AI..."
                 className="w-full resize-none bg-transparent outline-none px-2 py-2"
               />
               <div className="flex items-center justify-between px-2 pb-1">

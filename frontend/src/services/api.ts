@@ -10,10 +10,8 @@ export type ChatResponse = {
   citations: { id: string; score?: number; source?: string }[]
 }
 
-// Use Vercel API routes in production, localhost in development
-export const API_BASE = import.meta.env.PROD 
-  ? '' // Vercel will handle /api routes automatically
-  : import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+// API base URL for local development
+export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
 export async function chat(req: ChatRequest): Promise<ChatResponse> {
   const res = await fetch(`${API_BASE}/api/chat`, {
