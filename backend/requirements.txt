@@ -5,7 +5,7 @@ pinecone==2.2.4
 python-multipart==0.0.5
 httpx==0.24.1
 python-dotenv==1.0.0
-pydantic==1.8.2
+pydantic>=1.9.0,<2.0.0
 python-jose==3.3.0
 passlib==1.7.4
 python-decouple==3.8
