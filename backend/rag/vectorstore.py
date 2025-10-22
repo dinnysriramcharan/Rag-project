@@ -3,8 +3,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
 from pinecone import Pinecone
-from pinecone.core.client.configuration import Configuration
-from pinecone.core.client.api_client import ApiClient
 
 
 class PineconeVectorStore:
