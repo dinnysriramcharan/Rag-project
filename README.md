@@ -19,9 +19,31 @@ A production-ready Retrieval-Augmented Generation (RAG) chatbot system that allo
 - **AI**: OpenAI GPT models for chat completion
 - **Vector DB**: Pinecone for semantic search
 - **Embeddings**: OpenAI text-embedding models
-- **Deployment**: Local Development
+- **Deployment**: Railway (Production) + Local Development
 
 ## 🚀 Quick Start
+
+### **Railway Deployment (Production)**
+1. **Connect to Railway**:
+   - Go to [railway.app](https://railway.app)
+   - Sign up with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your repository
+
+2. **Configure Environment Variables**:
+   - Go to your project → Variables
+   - Add all required environment variables:
+     ```
+     OPENAI_API_KEY=your_openai_api_key
+     PINECONE_API_KEY=your_pinecone_api_key
+     PINECONE_ENV=your_pinecone_environment
+     PINECONE_INDEX=documents
+     ALLOWED_ORIGINS=https://your-frontend-domain.vercel.app
+     ```
+
+3. **Deploy**:
+   - Railway will automatically detect Python and install dependencies
+   - Your backend will be available at: `https://your-project.railway.app`
 
 ### **Local Development Setup**
 ```bash
@@ -78,7 +100,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 - **Backend**: FastAPI, Python, REST APIs
 - **AI/ML**: OpenAI API, Vector Embeddings, Semantic Search
 - **Database**: Pinecone Vector Database
-- **Deployment**: Local Development
+- **Deployment**: Railway (Production) + Local Development
 - **DevOps**: Environment management, Health checks, Monitoring
 
 ## 🔧 Configuration
