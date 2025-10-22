@@ -10,8 +10,8 @@ export type ChatResponse = {
   citations: { id: string; score?: number; source?: string }[]
 }
 
-// API base URL - use environment variable or default to localhost
-export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+// API base URL - use environment variable or default to deployed backend
+export const API_BASE = import.meta.env.VITE_API_BASE || 'https://rag-project-2v12.onrender.com'
 
 export async function chat(req: ChatRequest): Promise<ChatResponse> {
   const res = await fetch(`${API_BASE}/api/chat`, {
