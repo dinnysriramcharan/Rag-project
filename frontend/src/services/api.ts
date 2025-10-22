@@ -10,7 +10,7 @@ export type ChatResponse = {
   citations: { id: string; score?: number; source?: string }[]
 }
 
-// API base URL for local development
+// API base URL - use environment variable or default to localhost
 export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
 
 export async function chat(req: ChatRequest): Promise<ChatResponse> {
