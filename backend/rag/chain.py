@@ -3,7 +3,12 @@ from typing import Any, Dict, List, Optional
 
 from openai import OpenAI
 
-from rag.vectorstore import PineconeVectorStore
+try:
+    # For Railway deployment (running from backend directory)
+    from rag.vectorstore import PineconeVectorStore
+except ImportError:
+    # For local development (running from project root)
+    from backend.rag.vectorstore import PineconeVectorStore
 
 
 SYSTEM_PROMPT = (
