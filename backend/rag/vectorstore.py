@@ -2,7 +2,9 @@ import os
 from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone
+from pinecone.core.client.configuration import Configuration
+from pinecone.core.client.api_client import ApiClient
 
 
 class PineconeVectorStore:
@@ -19,16 +21,23 @@ class PineconeVectorStore:
         self.pc = Pinecone(api_key=pinecone_api_key)
 
         # Ensure index exists (safe on serverless init flows outside hot path)
-        if index_name not in [idx["name"] for idx in self.pc.list_indexes()]:
+        try:
+            self.index = self.pc.Index(index_name)
+        except Exception:
+            # Create index if it doesn't exist
             # Default to OpenAI text-embedding-3-small dimension 1536
             self.pc.create_index(
                 name=index_name,
                 dimension=1536,
                 metric="cosine",
-                spec=ServerlessSpec(cloud="aws", region=pinecone_env),
+                spec={
+                    "serverless": {
+                        "cloud": "aws",
+                        "region": pinecone_env
+                    }
+                }
             )
-
-        self.index = self.pc.Index(index_name)
+            self.index = self.pc.Index(index_name)
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if not openai_api_key:
             raise RuntimeError("OPENAI_API_KEY is not set")
