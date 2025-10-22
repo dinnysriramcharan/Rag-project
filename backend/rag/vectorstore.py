@@ -2,7 +2,7 @@ import os
 from typing import Any, Dict, List, Optional, Tuple
 
 from openai import OpenAI
-from pinecone import PineconeClient
+import pinecone
 
 
 class PineconeVectorStore:
@@ -16,15 +16,15 @@ class PineconeVectorStore:
             raise RuntimeError("PINECONE_ENV is not set")
 
         self.index_name = index_name
-        self.pc = PineconeClient(api_key=pinecone_api_key)
+        pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
 
         # Ensure index exists (safe on serverless init flows outside hot path)
         try:
-            self.index = self.pc.Index(index_name)
+            self.index = pinecone.Index(index_name)
         except Exception:
             # Create index if it doesn't exist
             # Default to OpenAI text-embedding-3-small dimension 1536
-            self.pc.create_index(
+            pinecone.create_index(
                 name=index_name,
                 dimension=1536,
                 metric="cosine",
@@ -35,7 +35,7 @@ class PineconeVectorStore:
                     }
                 }
             )
-            self.index = self.pc.Index(index_name)
+            self.index = pinecone.Index(index_name)
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if not openai_api_key:
             raise RuntimeError("OPENAI_API_KEY is not set")
