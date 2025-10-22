@@ -37,6 +37,7 @@ cp env.example .env
 # Edit .env with your API keys
 
 # Start backend server
+cd backend
 python -m uvicorn api.index:app --reload --host 127.0.0.1 --port 8000
 
 # Frontend Setup (new terminal)

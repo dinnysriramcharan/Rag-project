@@ -20,12 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # Load environment variables from backend/.env if present
 load_dotenv(PROJECT_ROOT / "backend" / ".env", override=False)
 
-try:
-    # For Railway deployment (running from backend directory)
-    from rag.chain import RAGChain
-except ImportError:
-    # For local development (running from project root)
-    from backend.rag.chain import RAGChain
+from rag.chain import RAGChain
 
 # Configure logging
 logging.basicConfig(
